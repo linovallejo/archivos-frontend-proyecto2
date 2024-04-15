@@ -30,9 +30,10 @@ interface PartitionDto {
 }
 interface PartitionsListProps {
   diskFileName: string;
+  onSelectPartition: (partitionId: number) => void;
 }
 
-const PartitionsList: React.FC<PartitionsListProps> = ({ diskFileName }) => {
+const PartitionsList: React.FC<PartitionsListProps> = ({ diskFileName, onSelectPartition }) => {
   const [partitions, setPartitions] = useState<PartitionDto[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -52,17 +53,17 @@ const PartitionsList: React.FC<PartitionsListProps> = ({ diskFileName }) => {
 
   return (
     <div>
-      <h3>Partitions on Disk: {diskFileName}</h3>
-      <StyledList>
-        {partitions.map((partition, index) => (
-          <ListItem key={index}>
-            <Icon className="material-icons">pie_chart</Icon>
-            {`Type: ${partition.Type}, Start: ${partition.Start}, Name: ${partition.Name}, ID: ${partition.Id}`}
-          </ListItem>
-        ))}
-      </StyledList>
+        <h3>Partitions on Disk: {diskFileName}</h3>
+        <StyledList>
+            {partitions.map(partition => (
+                <ListItem key={partition.Id} onClick={() => onSelectPartition(partition.Id)}>
+                    <Icon className="material-icons">pie_chart</Icon>
+                    {`Name: ${partition.Name}, Type: ${partition.Type}, Start: ${partition.Start}`}
+                </ListItem>
+            ))}
+        </StyledList>
     </div>
-  );
+);
 };
 
 export default PartitionsList;

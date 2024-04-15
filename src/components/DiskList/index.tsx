@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import PartitionsList from '../PartitionsList';
+//import PartitionsList from '../PartitionsList';
 import styled from 'styled-components';
 
 const StyledList = styled.ul`
@@ -22,9 +22,12 @@ const Icon = styled.span`
   color: #666; // Icon color
 `;
 
-const DiskList: React.FC = () => {
+interface DiskListProps {
+    onSelectDisk: (disk: string) => void;
+}
+const DiskList: React.FC<DiskListProps> = ({ onSelectDisk }) => {
     const [disks, setDisks] = useState<string[]>([]);
-    const [selectedDisk, setSelectedDisk] = useState<string | null>(null);
+    //const [selectedDisk, setSelectedDisk] = useState<string | null>(null);
 
     useEffect(() => {
         axios.get<string[]>('http://localhost:4000/list-disks')
@@ -38,10 +41,10 @@ const DiskList: React.FC = () => {
             });
     }, []);
 
-    const handleDiskSelect = (disk: string) => {
-        setSelectedDisk(disk);
-        // You could also manage state to show partitions here
-    };
+    // const handleDiskSelect = (disk: string) => {
+    //     setSelectedDisk(disk);
+    //     // You could also manage state to show partitions here
+    // };
 
     // if (selectedDisk) {
     //     return <Partitions disk={selectedDisk} />;
@@ -61,13 +64,13 @@ const DiskList: React.FC = () => {
             </ul> */}
             <StyledList>
                 {disks.map(disk => (
-                    <ListItem key={disk} onClick={() => handleDiskSelect(disk)}>
+                    <ListItem key={disk} onClick={() => onSelectDisk(disk)}>
                         <Icon className="material-icons">storage</Icon>
                         {disk}
                     </ListItem>
                 ))}
             </StyledList>
-            {selectedDisk && <PartitionsList diskFileName={selectedDisk} />}
+            {/* {selectedDisk && <PartitionsList diskFileName={selectedDisk} />} */}
         </div>
     );
 };
