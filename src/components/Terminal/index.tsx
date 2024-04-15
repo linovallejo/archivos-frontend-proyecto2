@@ -1,3 +1,4 @@
+// Terminal.tsx
 import React, { useState } from "react";
 import {
   Container,
@@ -7,18 +8,14 @@ import {
   FormControl,
   Button,
 } from "react-bootstrap";
-import axios from "axios";
-import "./styles.css";
 
-// If you have a defined structure for your backend response, define it here
-interface BackendResponse {
-  message: string;
-  // Add other properties as needed
+interface TerminalProps {
+  output: string[];
+  setOutput: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const Terminal: React.FC = () => {
+const Terminal: React.FC<TerminalProps> = ({ output, setOutput }) => {
   const [input, setInput] = useState<string>("");
-  const [output, setOutput] = useState<string[]>([]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value);
@@ -30,16 +27,13 @@ const Terminal: React.FC = () => {
     const newOutput = [...output, `> ${input}`];
 
     try {
-      //const response = await axios.post<BackendResponse>('YOUR_BACKEND_ENDPOINT', { command: input });
-      // const response = await fetch(`http://localhost:4000/`, { method: 'GET'})
       const response = await fetch(`http://localhost:4000/execute`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ command: input }),
       });
-      // Append the response from the backend to the output area
       const data = await response.text();
-      newOutput.push(data); // Adjust according to the actual structure of your response
+      newOutput.push(data); // Append response
     } catch (error) {
       newOutput.push("Error: Could not send command to the backend.");
     }
