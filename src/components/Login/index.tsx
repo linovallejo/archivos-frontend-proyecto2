@@ -4,7 +4,7 @@ import axios from 'axios';
 
 interface LoginProps {
     partitionId: number;
-    onLoginSuccess: () => void;
+    onLoginSuccess: (message: string) => void;
     onLoginFail: (error: string) => void;
 }
 
@@ -23,11 +23,12 @@ const Login: React.FC<LoginProps> = ({ partitionId, onLoginSuccess, onLoginFail 
                 password,
                 partitionId
             });
-            if (response.data.success) {
-                onLoginSuccess();
+            if (response.status === 200 && response.data) {
+                onLoginSuccess(response.data);
             } else {
                 onLoginFail("Authentication failed, please try again.");
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             onLoginFail(error.response?.data?.message || "Login request failed.");
         } finally {

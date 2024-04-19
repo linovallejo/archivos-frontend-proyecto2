@@ -39,8 +39,9 @@ const App: React.FC = () => {
     setAuthenticated(false); // Require re-authentication for new partition selection
   };
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = (message: string) => {
     setAuthenticated(true);
+    alert(message); // Display success message via alert or a modal
   };
 
   const handleLoginFail = (error: string) => {
