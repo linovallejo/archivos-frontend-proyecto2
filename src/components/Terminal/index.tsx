@@ -23,10 +23,9 @@ const Terminal: React.FC<TerminalProps> = ({ output, setOutput }) => {
 
   const handleBatchSubmit = async () => {
     if (!input.trim()) return;
-    // Append the batch command to the output area for historical viewing
     const newOutput = [...output, `Batch Command Submitted: ${input}`];
 
-    // Split input into individual commands
+    // Dividir la entrada de comandos 
     const commands = input.split("\n").filter((line) => line.trim() !== "");
     for (const command of commands) {
       try {
@@ -35,14 +34,13 @@ const Terminal: React.FC<TerminalProps> = ({ output, setOutput }) => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ command }),
         });
-        // No need to append each command's output
       } catch (error) {
         newOutput.push(`Error sending command: ${command}`);
       }
     }
 
     setOutput(newOutput);
-    setInput(""); // Clear input field after submission
+    setInput("");
   };
 
   return (
@@ -51,7 +49,7 @@ const Terminal: React.FC<TerminalProps> = ({ output, setOutput }) => {
         <Col>
           <InputGroup>
             <FormControl
-              as="textarea" // Changed from 'input' to 'textarea' to handle multiple lines
+              as="textarea" 
               placeholder="Ingrese o pegue aquí sus comandos..."
               value={input}
               onChange={handleInputChange}

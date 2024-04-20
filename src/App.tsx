@@ -6,7 +6,7 @@ import DiskList from "./components/DiskList";
 import PartitionList from "./components/PartitionsList"; // Ensure you have this component
 import Login from "./components/Login"; // Ensure you have this component
 import FileExplorer from "./components/FileExplorer"; // Ensure you have this component
-import Reports from "./components/Reports";
+import ReportViewer from "./components/ReportViewer";
 
 const App: React.FC = () => {
   const [selectedComponent, setSelectedComponent] =
@@ -79,7 +79,7 @@ const App: React.FC = () => {
               )}
             </div>
           )}
-          {selectedComponent === "reports" && <Reports />}
+          {selectedComponent === "reports" && <ReportViewer />}
         </Col>
       </Row>
     </Container>
