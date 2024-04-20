@@ -21,31 +21,28 @@ const Terminal: React.FC<TerminalProps> = ({ output, setOutput }) => {
     setInput(event.target.value);
   };
 
-  const handleSubmit = async () => {
+  const handleBatchSubmit = async () => {
     if (!input.trim()) return;
-    // Append the command to the output area
-    const newOutput = [...output, `> ${input}`];
+    // Append the batch command to the output area for historical viewing
+    const newOutput = [...output, `Batch Command Submitted: ${input}`];
 
-    try {
-      const response = await fetch(`http://localhost:4000/execute`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ command: input }),
-      });
-      const data = await response.text();
-      newOutput.push(data); // Append response
-    } catch (error) {
-      newOutput.push("Error: Could not send command to the backend.");
+    // Split input into individual commands
+    const commands = input.split("\n").filter((line) => line.trim() !== "");
+    for (const command of commands) {
+      try {
+        await fetch(`http://localhost:4000/execute`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ command }),
+        });
+        // No need to append each command's output
+      } catch (error) {
+        newOutput.push(`Error sending command: ${command}`);
+      }
     }
 
     setOutput(newOutput);
-    setInput(""); // Clear input field
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      handleSubmit();
-    }
+    setInput(""); // Clear input field after submission
   };
 
   return (
@@ -54,32 +51,31 @@ const Terminal: React.FC<TerminalProps> = ({ output, setOutput }) => {
         <Col>
           <InputGroup>
             <FormControl
-              placeholder="Ingrese comando..."
+              as="textarea" // Changed from 'input' to 'textarea' to handle multiple lines
+              placeholder="Ingrese o pegue aquí sus comandos..."
               value={input}
               onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-              style={{ backgroundColor: "black", color: "white" }}
+              style={{
+                backgroundColor: "black",
+                color: "white",
+                height: "500px",
+                overflowY: "scroll",
+              }}
             />
-            <Button variant="outline-secondary" onClick={handleSubmit}>
-              Enviar
-            </Button>
           </InputGroup>
         </Col>
       </Row>
-      <Row>
+      <Row className="mb-3">
         <Col>
-          <div
-            style={{
-              backgroundColor: "black",
-              color: "white",
-              height: "400px",
-              overflowY: "scroll",
-              padding: "10px",
-            }}
-          >
-            {output.map((line, index) => (
-              <div key={index}>{line}</div>
-            ))}
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              className="btn btn-primary btn-lg active"
+              role="button"
+              aria-pressed="true"
+              onClick={handleBatchSubmit}
+            >
+              Ejecutar Comandos
+            </Button>
           </div>
         </Col>
       </Row>
