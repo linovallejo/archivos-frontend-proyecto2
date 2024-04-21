@@ -2,9 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { instance } from '@viz-js/viz'; // Import the Viz class from the @viz-js/viz package
 
-const ReportViewer = () => {
+interface ReportViewerProps {
+    dotCode: string;
+  }
+const ReportViewer: React.FC<ReportViewerProps> = ({ dotCode }) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [dotCode, setDotCode] = useState('');
+    const [dotCodeReport, setDotCodeReport] = useState('');
 
     // useEffect(() => {
     //     fetch('http://localhost:4000/api/generate-dot')
@@ -16,7 +19,7 @@ const ReportViewer = () => {
     //         .catch(err => console.error('Failed to fetch DOT code:', err));
     // }, []);
     useEffect(() => {
-        setDotCode(`digraph G {
+        setDotCodeReport(`digraph G {
             a -> b
             a -> c
             b -> d
