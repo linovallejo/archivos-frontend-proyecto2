@@ -7,7 +7,7 @@ interface ReportViewerProps {
   }
 const ReportViewer: React.FC<ReportViewerProps> = ({ dotCode }) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [dotCodeReport, setDotCodeReport] = useState('');
+    const [, setDotCodeReport] = useState('');
 
     // useEffect(() => {
     //     fetch('http://localhost:4000/api/generate-dot')
