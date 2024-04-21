@@ -6,13 +6,14 @@ import DiskList from "./components/DiskList";
 import PartitionList from "./components/PartitionsList"; // Ensure you have this component
 import Login from "./components/Login"; // Ensure you have this component
 import FileExplorer from "./components/FileExplorer"; // Ensure you have this component
-import ReportViewer from "./components/ReportViewer";
+//import ReportViewer from "./components/ReportViewer";
+import Reports from "./components/Reports";
 
 const App: React.FC = () => {
   const [selectedComponent, setSelectedComponent] =
     useState<string>("terminal");
   const [selectedDisk, setSelectedDisk] = useState<string | null>(null);
-  const [selectedPartition, setSelectedPartition] = useState<number | null>(
+  const [selectedPartition, setSelectedPartition] = useState<string | null>(
     null
   );
   const [authenticated, setAuthenticated] = useState(false);
@@ -21,7 +22,7 @@ const App: React.FC = () => {
   const handleSelectionChange = (selectedKey: string | null) => {
     setSelectedComponent(selectedKey || "terminal");
     // Reset disk and partition selections when changing tabs
-    if (selectedKey !== "gui") {
+    if (selectedKey !== "gui" && selectedKey !== "reports") {
       setSelectedDisk(null);
       setSelectedPartition(null);
       setAuthenticated(false);
@@ -34,7 +35,7 @@ const App: React.FC = () => {
     setAuthenticated(false);
   };
 
-  const handlePartitionSelect = (partitionId: number) => {
+  const handlePartitionSelect = (partitionId: string) => {
     setSelectedPartition(partitionId);
     setAuthenticated(false); // Require re-authentication for new partition selection
   };
@@ -75,11 +76,13 @@ const App: React.FC = () => {
                 />
               )}
               {selectedDisk && selectedPartition && authenticated && (
-                <FileExplorer partitionId={selectedPartition} />
+                <FileExplorer partitionId={selectedPartition.toString()} />
               )}
             </div>
           )}
-          {selectedComponent === "reports" && <ReportViewer />}
+          {selectedComponent === "reports" && selectedPartition && (
+            <Reports partitionId={selectedPartition.toString()} />
+          )}
         </Col>
       </Row>
     </Container>

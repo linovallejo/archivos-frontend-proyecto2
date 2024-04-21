@@ -2,7 +2,7 @@
 import React from 'react';
 
 interface FileExplorerProps {
-    partitionId: number;
+    partitionId: string;
 }
 
 const FileExplorer: React.FC<FileExplorerProps> = ({ partitionId }) => {

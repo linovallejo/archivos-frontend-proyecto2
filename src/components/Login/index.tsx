@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 interface LoginProps {
-    partitionId: number;
+    partitionId: string;
     onLoginSuccess: (message: string) => void;
     onLoginFail: (error: string) => void;
 }

@@ -30,7 +30,7 @@ interface PartitionDto {
 }
 interface PartitionsListProps {
   diskFileName: string;
-  onSelectPartition: (partitionId: number) => void;
+  onSelectPartition: (partitionId: string) => void;
 }
 
 const PartitionsList: React.FC<PartitionsListProps> = ({ diskFileName, onSelectPartition }) => {
@@ -56,7 +56,7 @@ const PartitionsList: React.FC<PartitionsListProps> = ({ diskFileName, onSelectP
         <h3>Partitions on Disk: {diskFileName}</h3>
         <StyledList>
             {partitions.map(partition => (
-                <ListItem key={partition.Id} onClick={() => onSelectPartition(partition.Id)}>
+                <ListItem key={partition.Id} onClick={() => onSelectPartition(partition.Id.toString())}>
                     <Icon className="material-icons">pie_chart</Icon>
                     {`Name: ${partition.Name}, Type: ${partition.Type}, Start: ${partition.Start}`}
                 </ListItem>
