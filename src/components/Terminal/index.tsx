@@ -25,21 +25,26 @@ const Terminal: React.FC<TerminalProps> = ({ output, setOutput }) => {
     if (!input.trim()) return;
     const newOutput = [...output, `Batch Command Submitted: ${input}`];
 
-    // Dividir la entrada de comandos 
+    // Dividir la entrada de comandos
     const commands = input.split("\n").filter((line) => line.trim() !== "");
     for (const command of commands) {
       try {
-        // await fetch(`http://ec2-52-15-68-96.us-east-2.compute.amazonaws.com:4000/execute`, {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify({ command }),
-        // });
-        await fetch(`http://3.18.158.241:4000/execute`, {
+        await fetch(`http://localhost:4000/execute`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ command }),
         });
 
+        // await fetch(`http://ec2-52-15-68-96.us-east-2.compute.amazonaws.com:4000/execute`, {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify({ command }),
+        // });
+        // await fetch(`http://3.18.158.241:4000/execute`, {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify({ command }),
+        // });
       } catch (error) {
         newOutput.push(`Error sending command: ${command}`);
       }
@@ -55,7 +60,7 @@ const Terminal: React.FC<TerminalProps> = ({ output, setOutput }) => {
         <Col>
           <InputGroup>
             <FormControl
-              as="textarea" 
+              as="textarea"
               placeholder="Ingrese o pegue aquí sus comandos..."
               value={input}
               onChange={handleInputChange}

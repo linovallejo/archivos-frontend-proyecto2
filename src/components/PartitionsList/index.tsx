@@ -17,9 +17,9 @@ const ListItem = styled.li`
 `;
 
 const Icon = styled.span`
-  font-size: 24px;
-  margin-right: 10px;
-  color: #666;
+  font-size: 96px; // Larger icon
+  margin-right: 10px; // Space between icon and text
+  color: #666; // Icon color
 `;
 
 interface PartitionDto {
