@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ReportViewer from "../ReportViewer";
+import { useApiConfig } from '../../ApiConfigContext';
 
 interface ReportsProps {
   partitionId: string;
@@ -12,12 +13,14 @@ interface Report {
 }
 
 const Reports: React.FC<ReportsProps> = ({ partitionId }) => {
+  const { apiBaseUrl } = useApiConfig();
+
   const [reports, setReports] = useState<Report[]>([]);
   const [selectedReport, setSelectedReport] = useState(null);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/reports?partitionId=${partitionId}`)
+      .get(`${apiBaseUrl}/reports?partitionId=${partitionId}`)
       .then((response) => {
         setReports(response.data);
       })
@@ -26,7 +29,7 @@ const Reports: React.FC<ReportsProps> = ({ partitionId }) => {
 
   const handleReportClick = async (dotFileName: string) => {
     try {
-      const response = await axios.post(`http://localhost:4000/get-report`, {
+      const response = await axios.post(`${apiBaseUrl}/get-report`, {
         dotFileName,
       });
       setSelectedReport(response.data.dotCode);

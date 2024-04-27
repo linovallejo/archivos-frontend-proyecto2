@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import FileContentViewer from '../FileContentsViewer';
+import { useApiConfig } from '../../ApiConfigContext';
 
 const StyledList = styled.ul`
   list-style-type: none; // Removes bullets
@@ -32,6 +33,8 @@ interface FileExplorerItem {
 }
 
 const FileExplorer: React.FC<FileExplorerProps> = ({ partitionId }) => {
+    const { apiBaseUrl } = useApiConfig();
+
     const [items, setItems] = useState<FileExplorerItem[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -43,7 +46,7 @@ const FileExplorer: React.FC<FileExplorerProps> = ({ partitionId }) => {
         const fetchContents = async (path: string) => {
             try {
                 setLoading(true);
-                const response = await axios.get(`http://localhost:4000/get-root-directory-contents?partitionId=${partitionId}`);
+                const response = await axios.get(`${apiBaseUrl}/get-root-directory-contents?partitionId=${partitionId}`);
                 setCurrentPath(path);
                 setItems(response.data.items || response.data.content);  // Set items if directory, content if file
                 setLoading(false);
@@ -65,7 +68,7 @@ const FileExplorer: React.FC<FileExplorerProps> = ({ partitionId }) => {
             setCurrentPath(currentPath + item.name + '/');
         } else {  // Handle file click, fetch file content
             try {
-                const response = await axios.post(`http://localhost:4000/get-file-contents`, {
+                const response = await axios.post(`${apiBaseUrl}/get-file-contents`, {
                     partitionId: partitionId,
                     path: currentPath + item.name
                 });

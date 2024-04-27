@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { useApiConfig } from '../../ApiConfigContext';
+
 
 const StyledList = styled.ul`
   list-style-type: none;
@@ -34,11 +36,13 @@ interface PartitionsListProps {
 }
 
 const PartitionsList: React.FC<PartitionsListProps> = ({ diskFileName, onSelectPartition }) => {
+  const { apiBaseUrl } = useApiConfig();
+
   const [partitions, setPartitions] = useState<PartitionDto[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    axios.get<PartitionDto[]>(`http://localhost:4000/list-mounted-partitions-by-disk/${diskFileName}`)
+    axios.get<PartitionDto[]>(`${apiBaseUrl}/list-mounted-partitions-by-disk/${diskFileName}`)
       .then(response => {
         setPartitions(response.data);
         setLoading(false);

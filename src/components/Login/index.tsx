@@ -1,6 +1,7 @@
 // Login.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useApiConfig } from '../../ApiConfigContext';
 
 interface LoginProps {
     partitionId: string;
@@ -9,6 +10,8 @@ interface LoginProps {
 }
 
 const Login: React.FC<LoginProps> = ({ partitionId, onLoginSuccess, onLoginFail }) => {
+    const { apiBaseUrl } = useApiConfig();
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -18,7 +21,7 @@ const Login: React.FC<LoginProps> = ({ partitionId, onLoginSuccess, onLoginFail 
         setLoading(true);
 
         try {
-            const response = await axios.post(`http://localhost:4000/login`, {
+            const response = await axios.post(`${apiBaseUrl}/login`, {
                 username,
                 password,
                 partitionId

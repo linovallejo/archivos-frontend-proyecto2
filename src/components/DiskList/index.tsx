@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 //import PartitionsList from '../PartitionsList';
 import styled from 'styled-components';
+import { useApiConfig } from '../../ApiConfigContext';
+
 
 const StyledList = styled.ul`
   list-style-type: none; // Removes bullets
@@ -26,11 +28,13 @@ interface DiskListProps {
     onSelectDisk: (disk: string) => void;
 }
 const DiskList: React.FC<DiskListProps> = ({ onSelectDisk }) => {
+    const { apiBaseUrl } = useApiConfig();
+
     const [disks, setDisks] = useState<string[]>([]);
     //const [selectedDisk, setSelectedDisk] = useState<string | null>(null);
 
     useEffect(() => {
-        axios.get<string[]>('http://localhost:4000/list-disks')
+        axios.get<string[]>(`${apiBaseUrl}/list-disks`)
             .then(response => {
                 setDisks(response.data);
                 //setLoading(false);
