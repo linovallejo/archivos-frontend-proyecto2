@@ -1,5 +1,6 @@
 // Terminal.tsx
 import React, { useState } from "react";
+import { useApiConfig } from '../../ApiConfigContext';
 import {
   Container,
   Row,
@@ -15,6 +16,7 @@ interface TerminalProps {
 }
 
 const Terminal: React.FC<TerminalProps> = ({ output, setOutput }) => {
+  const { apiBaseUrl } = useApiConfig();
   const [input, setInput] = useState<string>("");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +31,7 @@ const Terminal: React.FC<TerminalProps> = ({ output, setOutput }) => {
     const commands = input.split("\n").filter((line) => line.trim() !== "");
     for (const command of commands) {
       try {
-        await fetch(`http://localhost:4000/execute`, {
+        await fetch(`${apiBaseUrl}/execute`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ command }),

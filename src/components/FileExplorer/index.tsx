@@ -1,7 +1,7 @@
-// FileExplorer.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import FileContentViewer from '../FileContentsViewer';
 
 const StyledList = styled.ul`
   list-style-type: none; // Removes bullets
@@ -36,14 +36,15 @@ const FileExplorer: React.FC<FileExplorerProps> = ({ partitionId }) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [currentPath, setCurrentPath] = useState<string>('/');  // track the current directory path
+    const [fileContent, setFileContent] = useState<string | null>(null);
 
     // Fetch the directory or file contents
     useEffect(() => {
         const fetchContents = async (path: string) => {
             try {
                 setLoading(true);
-                //const response = await axios.get(`/api/get-contents?partitionId=${partitionId}&path=${path}`);
                 const response = await axios.get(`http://localhost:4000/get-root-directory-contents?partitionId=${partitionId}`);
+                setCurrentPath(path);
                 setItems(response.data.items || response.data.content);  // Set items if directory, content if file
                 setLoading(false);
             } catch (err) {
@@ -55,15 +56,25 @@ const FileExplorer: React.FC<FileExplorerProps> = ({ partitionId }) => {
         fetchContents(currentPath);
     }, [partitionId, currentPath]);
 
-    const handleItemClick = (item: FileExplorerItem) => {
+    const handleItemClick = async (item: FileExplorerItem) => {
         if (item.name === '..') {
             if (currentPath !== '/') {  // Prevent going up from the root directory
                 setCurrentPath(path => path.replace(/\/[^\/]*\/?$/, ''));  // Go up one directory
             }
         } else if (item.isFolder) {
             setCurrentPath(currentPath + item.name + '/');
-        } else {  // Handle file click, potentially fetch file content
-            alert(`Fetch and display content for file: ${item.name}`);  // Implement as needed
+        } else {  // Handle file click, fetch file content
+            try {
+                const response = await axios.post(`http://localhost:4000/get-file-contents`, {
+                    partitionId: partitionId,
+                    path: currentPath + item.name
+                });
+                setFileContent(response.data.contents);  // Assume the API returns the content directly
+                console.log(response.data);
+            } catch (error) {
+                console.error('Failed to fetch file content:', error);
+                alert('Failed to load file content');
+            }
         }
     };
 
@@ -82,6 +93,7 @@ const FileExplorer: React.FC<FileExplorerProps> = ({ partitionId }) => {
                     </ListItem>
                 ))}
             </StyledList>
+            {fileContent && <FileContentViewer content={fileContent} onClose={() => setFileContent(null)} />}
         </div>
     );
 };

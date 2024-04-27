@@ -8,6 +8,7 @@ import Login from "./components/Login"; // Ensure you have this component
 import FileExplorer from "./components/FileExplorer"; // Ensure you have this component
 //import ReportViewer from "./components/ReportViewer";
 import Reports from "./components/Reports";
+import { ApiConfigProvider } from "./ApiConfigContext";
 
 const App: React.FC = () => {
   const [selectedComponent, setSelectedComponent] =
@@ -50,42 +51,47 @@ const App: React.FC = () => {
   };
 
   return (
-    <Container fluid>
-      <Row>
-        <Col xs={2} id="sidebar-wrapper">
-          <Sidebar onSelectionChange={handleSelectionChange} />
-        </Col>
-        <Col xs={10} id="page-content-wrapper">
-          {selectedComponent === "terminal" && (
-            <Terminal output={terminalHistory} setOutput={setTerminalHistory} />
-          )}
-          {selectedComponent === "gui" && (
-            <div>
-              {!selectedDisk && <DiskList onSelectDisk={handleDiskSelect} />}
-              {selectedDisk && !selectedPartition && (
-                <PartitionList
-                  diskFileName={selectedDisk}
-                  onSelectPartition={handlePartitionSelect}
-                />
-              )}
-              {selectedDisk && selectedPartition && !authenticated && (
-                <Login
-                  partitionId={selectedPartition}
-                  onLoginSuccess={handleLoginSuccess}
-                  onLoginFail={handleLoginFail}
-                />
-              )}
-              {selectedDisk && selectedPartition && authenticated && (
-                <FileExplorer partitionId={selectedPartition.toString()} />
-              )}
-            </div>
-          )}
-          {selectedComponent === "reports" && selectedPartition && (
-            <Reports partitionId={selectedPartition.toString()} />
-          )}
-        </Col>
-      </Row>
-    </Container>
+    <ApiConfigProvider>
+      <Container fluid>
+        <Row>
+          <Col xs={2} id="sidebar-wrapper">
+            <Sidebar onSelectionChange={handleSelectionChange} />
+          </Col>
+          <Col xs={10} id="page-content-wrapper">
+            {selectedComponent === "terminal" && (
+              <Terminal
+                output={terminalHistory}
+                setOutput={setTerminalHistory}
+              />
+            )}
+            {selectedComponent === "gui" && (
+              <div>
+                {!selectedDisk && <DiskList onSelectDisk={handleDiskSelect} />}
+                {selectedDisk && !selectedPartition && (
+                  <PartitionList
+                    diskFileName={selectedDisk}
+                    onSelectPartition={handlePartitionSelect}
+                  />
+                )}
+                {selectedDisk && selectedPartition && !authenticated && (
+                  <Login
+                    partitionId={selectedPartition}
+                    onLoginSuccess={handleLoginSuccess}
+                    onLoginFail={handleLoginFail}
+                  />
+                )}
+                {selectedDisk && selectedPartition && authenticated && (
+                  <FileExplorer partitionId={selectedPartition.toString()} />
+                )}
+              </div>
+            )}
+            {selectedComponent === "reports" && selectedPartition && (
+              <Reports partitionId={selectedPartition.toString()} />
+            )}
+          </Col>
+        </Row>
+      </Container>
+    </ApiConfigProvider>
   );
 };
 
