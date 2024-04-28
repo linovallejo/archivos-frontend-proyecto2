@@ -53,7 +53,7 @@ const ReportViewer: React.FC<ReportViewerProps> = ({ dotCode }) => {
 
     return (
         <div>
-            <h1>Graph Visualization</h1>
+            <h2>Reporte</h2>
             <div id="dotOutput"></div>
         </div>
     );

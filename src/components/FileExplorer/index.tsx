@@ -40,6 +40,7 @@ const FileExplorer: React.FC<FileExplorerProps> = ({ partitionId }) => {
     const [error, setError] = useState<string | null>(null);
     const [currentPath, setCurrentPath] = useState<string>('/');  // track the current directory path
     const [fileContent, setFileContent] = useState<string | null>(null);
+    const [fileName, setFileName] = useState<string | null>(null);
 
     // Fetch the directory or file contents
     useEffect(() => {
@@ -73,6 +74,7 @@ const FileExplorer: React.FC<FileExplorerProps> = ({ partitionId }) => {
                     path: currentPath + item.name
                 });
                 setFileContent(response.data.contents);  // Assume the API returns the content directly
+                setFileName(item.name);  // Set the file name for display
                 console.log(response.data);
             } catch (error) {
                 console.error('Failed to fetch file content:', error);
@@ -96,7 +98,7 @@ const FileExplorer: React.FC<FileExplorerProps> = ({ partitionId }) => {
                     </ListItem>
                 ))}
             </StyledList>
-            {fileContent && <FileContentViewer content={fileContent} onClose={() => setFileContent(null)} />}
+            {fileContent && <FileContentViewer content={fileContent} fileName={currentPath+fileName} onClose={() => setFileContent(null)} />}
         </div>
     );
 };
