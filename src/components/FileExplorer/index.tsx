@@ -3,7 +3,6 @@ import axios from 'axios';
 import styled from 'styled-components';
 import FileContentViewer from '../FileContentsViewer';
 import { useApiConfig } from '../../ApiConfigContext';
-import PartitionsList from '../PartitionsList/index';
 
 const StyledList = styled.ul`
   list-style-type: none; // Removes bullets
