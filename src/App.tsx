@@ -71,6 +71,7 @@ const App: React.FC = () => {
                   <PartitionList
                     diskFileName={selectedDisk}
                     onSelectPartition={handlePartitionSelect}
+                    onBack={() => { setSelectedDisk(null); }}
                   />
                 )}
                 {selectedDisk && selectedPartition && !authenticated && (
@@ -78,10 +79,11 @@ const App: React.FC = () => {
                     partitionId={selectedPartition}
                     onLoginSuccess={handleLoginSuccess}
                     onLoginFail={handleLoginFail}
+                    onBack={() => { setSelectedPartition(null); }}
                   />
                 )}
                 {selectedDisk && selectedPartition && authenticated && (
-                  <FileExplorer partitionId={selectedPartition.toString()} />
+                  <FileExplorer partitionId={selectedPartition.toString()} onBack={() => { setSelectedPartition(null); }}/>
                 )}
               </div>
             )}

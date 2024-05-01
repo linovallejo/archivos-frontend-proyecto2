@@ -24,6 +24,10 @@ const Icon = styled.span`
   color: #666; // Icon color
 `;
 
+const BackButton = styled.button`
+  margin-top: 20px;
+`;
+
 interface PartitionDto {
   Type: string;
   Start: number;
@@ -33,9 +37,10 @@ interface PartitionDto {
 interface PartitionsListProps {
   diskFileName: string;
   onSelectPartition: (partitionId: string) => void;
+  onBack: () => void;
 }
 
-const PartitionsList: React.FC<PartitionsListProps> = ({ diskFileName, onSelectPartition }) => {
+const PartitionsList: React.FC<PartitionsListProps> = ({ diskFileName, onSelectPartition, onBack }) => {
   const { apiBaseUrl } = useApiConfig();
 
   const [partitions, setPartitions] = useState<PartitionDto[]>([]);
@@ -66,6 +71,7 @@ const PartitionsList: React.FC<PartitionsListProps> = ({ diskFileName, onSelectP
                 </ListItem>
             ))}
         </StyledList>
+        <BackButton onClick={onBack}>Back to Disk List</BackButton>
     </div>
 );
 };

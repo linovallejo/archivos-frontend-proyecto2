@@ -3,6 +3,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import FileContentViewer from '../FileContentsViewer';
 import { useApiConfig } from '../../ApiConfigContext';
+import PartitionsList from '../PartitionsList/index';
 
 const StyledList = styled.ul`
   list-style-type: none; // Removes bullets
@@ -22,8 +23,14 @@ const Icon = styled.span`
   margin-right: 10px; // Space between icon and text
   color: #666; // Icon color
 `;
+
+const BackButton = styled.button`
+  margin-top: 20px;
+`;
+
 interface FileExplorerProps {
     partitionId: string;
+    onBack: () => void;
 }
 
 interface FileExplorerItem {
@@ -32,7 +39,7 @@ interface FileExplorerItem {
     isFolder: boolean;
 }
 
-const FileExplorer: React.FC<FileExplorerProps> = ({ partitionId }) => {
+const FileExplorer: React.FC<FileExplorerProps> = ({ partitionId, onBack }) => {
     const { apiBaseUrl } = useApiConfig();
 
     const [items, setItems] = useState<FileExplorerItem[]>([]);
@@ -99,6 +106,7 @@ const FileExplorer: React.FC<FileExplorerProps> = ({ partitionId }) => {
                 ))}
             </StyledList>
             {fileContent && <FileContentViewer content={fileContent} fileName={currentPath+fileName} onClose={() => setFileContent(null)} />}
+            <BackButton onClick={onBack}>Back to Partitions List</BackButton>
         </div>
     );
 };

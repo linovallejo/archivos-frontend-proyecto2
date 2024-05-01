@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-//import PartitionsList from '../PartitionsList';
 import styled from 'styled-components';
 import { useApiConfig } from '../../ApiConfigContext';
 
@@ -31,41 +30,20 @@ const DiskList: React.FC<DiskListProps> = ({ onSelectDisk }) => {
     const { apiBaseUrl } = useApiConfig();
 
     const [disks, setDisks] = useState<string[]>([]);
-    //const [selectedDisk, setSelectedDisk] = useState<string | null>(null);
 
     useEffect(() => {
         axios.get<string[]>(`${apiBaseUrl}/list-disks`)
             .then(response => {
                 setDisks(response.data);
-                //setLoading(false);
             })
             .catch(error => {
                 console.error('Failed to fetch disks:', error);
-                //setLoading(false);
             });
     }, []);
-
-    // const handleDiskSelect = (disk: string) => {
-    //     setSelectedDisk(disk);
-    //     // You could also manage state to show partitions here
-    // };
-
-    // if (selectedDisk) {
-    //     return <Partitions disk={selectedDisk} />;
-    // }
-
-    // if (loading) return <p>Loading...</p>;
 
     return (
         <div>
             <h3>Available Disks:</h3>
-            {/* <ul>
-                {disks.map(disk => (
-                    <li key={disk} onClick={() => handleDiskSelect(disk)}>
-                        <span className="material-icons">storage</span> {disk}
-                    </li>
-                ))}
-            </ul> */}
             <StyledList>
                 {disks.map(disk => (
                     <ListItem key={disk} onClick={() => onSelectDisk(disk)}>
@@ -74,7 +52,6 @@ const DiskList: React.FC<DiskListProps> = ({ onSelectDisk }) => {
                     </ListItem>
                 ))}
             </StyledList>
-            {/* {selectedDisk && <PartitionsList diskFileName={selectedDisk} />} */}
         </div>
     );
 };
